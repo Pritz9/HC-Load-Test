@@ -13,30 +13,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies (K6 & k6-reporter)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install K6 and dependencies
         run: |
           sudo apt update
           sudo apt install -y gnupg curl ca-certificates unzip
-
-          # Install K6
           curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list > /dev/null
           sudo apt update
           sudo apt install -y k6
 
-          # Install k6-reporter (fixed: direct binary, no zip)
-          curl -L -o k6-reporter https://github.com/szkiba/k6-reporter/releases/download/v1.7.0/k6-reporter-linux-amd64
-          chmod +x k6-reporter
-          sudo mv k6-reporter /usr/local/bin/
+      - name: Install k6-html-reporter
+        run: |
+          npm install -g k6-html-reporter
 
       - name: Run K6 Load Test
         run: |
           mkdir -p reports
-          k6 run test.js --summary-export=result.json || true  # continue even if test fails
+          k6 run test.js --summary-export=result.json || true
 
       - name: Generate HTML Report
         run: |
-          k6-reporter result.json reports/k6_report.html
+          k6-html-reporter --summary-export=result.json --output reports/k6_report.html
 
       - name: Upload HTML Report Artifact
         if: always()
