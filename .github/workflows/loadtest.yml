@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Install K6
         run: |
           sudo apt update
@@ -30,9 +33,6 @@ jobs:
       - name: Run K6 test and export summary
         run: k6 run --summary-export=result.json test.js
 
-      - name: Ensure reports directory exists
-        run: mkdir -p reports
-  
       - name: Generate HTML Report
         run: node generateReport.js
 
