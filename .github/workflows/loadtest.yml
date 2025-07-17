@@ -71,4 +71,4 @@ jobs:
 
             Regards,  
             GitHub Actions
-          attachments: reports/k6_report.html
+          attachments: "reports/k6_report.html"
