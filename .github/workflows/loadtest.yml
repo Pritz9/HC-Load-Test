@@ -21,7 +21,10 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list > /dev/null
           sudo apt update
           sudo apt install -y k6
-          npm install -g k6-reporter
+          wget https://github.com/szkiba/k6-reporter/releases/latest/download/k6-reporter-linux-amd64.zip
+          unzip k6-reporter-linux-amd64.zip
+          chmod +x k6-reporter
+          sudo mv k6-reporter /usr/local/bin/
 
       - name: Run K6 Load Test
         run: |
