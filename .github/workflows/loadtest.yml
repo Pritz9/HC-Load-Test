@@ -28,9 +28,7 @@ jobs:
           sudo apt install -y k6
 
       - name: Install k6-html-reporter
-        run: |
-          npm install k6-html-reporter@latest
-          if [ ! -f "node_modules/.bin/k6-html-reporter" ]; then echo "k6-html-reporter executable not found"; exit 1; fi
+        run: npm install k6-html-reporter@latest
 
       - name: Run K6 test and generate result
         run: |
@@ -39,6 +37,7 @@ jobs:
 
       - name: Generate HTML Report
         run: |
+          mkdir -p reports
           npx k6-html-reporter --summary-export=result.json --output reports/k6_report.html || { echo "Failed to generate HTML report"; exit 1; }
 
       - name: Upload HTML Report as Artifact
