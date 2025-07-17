@@ -28,7 +28,9 @@ jobs:
           sudo apt install -y k6
 
       - name: Install k6-html-reporter
-        run: npm install k6-html-reporter@latest
+        run: |
+          npm install k6-html-reporter@latest
+          if [ $? -ne 0 ]; then echo "Failed to install k6-html-reporter"; exit 1; fi
 
       - name: Run K6 test and generate result
         run: |
