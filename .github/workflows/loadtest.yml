@@ -1,4 +1,4 @@
-name: k6 Load Test
+name: K6 Load Test
 
 on:
   push:
@@ -11,9 +11,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install k6
+      - name: Install dependencies (K6 & k6-reporter)
         run: |
           sudo apt update
           sudo apt install -y gnupg curl ca-certificates
@@ -21,23 +21,22 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list > /dev/null
           sudo apt update
           sudo apt install -y k6
+          npm install -g k6-reporter
 
       - name: Run K6 Load Test
         run: |
           mkdir -p reports
-          k6 run test.js --summary-export=reports/result.json || true
+          k6 run test.js --summary-export=result.json || true
 
-      - name: Convert JSON to HTML report
-        if: always()
+      - name: Generate HTML Report
         run: |
-          npm install -g k6-to-html
-          k6-to-html reports/result.json -o reports/k6_report.html
+          k6-reporter result.json reports/k6_report.html
 
-      - name: Upload Report Artifact
+      - name: Upload HTML Report Artifact
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: k6-html-report
+          name: loadtest-html-report
           path: reports/k6_report.html
 
       - name: Send HTML Report via Email
@@ -45,19 +44,18 @@ jobs:
         uses: dawidd6/action-send-mail@v3.6.0
         with:
           server_address: smtp.gmail.com
-          server_port: 587
+          server_port: 465
           secure: true
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
           from: ${{ secrets.EMAIL_USERNAME }}
           to: ${{ secrets.EMAIL_RECEIVER }}
-          subject: "K6 Load Test Report"
+          subject: "📊 K6 Load Test Report"
           body: |
             Hello,
 
             Please find the attached HTML report for the recent K6 Load Test.
 
             Regards,  
-            GitHub Actions
+            GitHub Actions 🤖
           attachments: reports/k6_report.html
-          
