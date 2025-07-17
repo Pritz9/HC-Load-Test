@@ -33,6 +33,12 @@ jobs:
       - name: Run K6 test and export summary
         run: k6 run --summary-export=result.json test.js
 
+      - name: Clean up report directory
+        run: |
+         if [ -d reports/k6_report.html ]; then
+           rm -rf reports/k6_report.html
+         fi
+
       - name: Generate HTML Report
         run: node generateReport.js
 
