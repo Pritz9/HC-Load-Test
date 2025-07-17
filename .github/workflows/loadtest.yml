@@ -16,20 +16,23 @@ jobs:
       - name: Install dependencies (K6 & k6-reporter)
         run: |
           sudo apt update
-          sudo apt install -y gnupg curl ca-certificates
+          sudo apt install -y gnupg curl ca-certificates unzip
+
+          # Install K6
           curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list > /dev/null
           sudo apt update
           sudo apt install -y k6
-          wget https://github.com/szkiba/k6-reporter/releases/latest/download/k6-reporter-linux-amd64.zip
-          unzip k6-reporter-linux-amd64.zip
+
+          # Install k6-reporter (fixed: direct binary, no zip)
+          curl -L -o k6-reporter https://github.com/szkiba/k6-reporter/releases/download/v1.7.0/k6-reporter-linux-amd64
           chmod +x k6-reporter
           sudo mv k6-reporter /usr/local/bin/
 
       - name: Run K6 Load Test
         run: |
           mkdir -p reports
-          k6 run test.js --summary-export=result.json || true
+          k6 run test.js --summary-export=result.json || true  # continue even if test fails
 
       - name: Generate HTML Report
         run: |
@@ -53,12 +56,12 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           from: ${{ secrets.EMAIL_USERNAME }}
           to: ${{ secrets.EMAIL_RECEIVER }}
-          subject: "📊 K6 Load Test Report"
+          subject: "K6 Load Test Report"
           body: |
             Hello,
 
             Please find the attached HTML report for the recent K6 Load Test.
 
             Regards,  
-            GitHub Actions 🤖
+            GitHub Actions
           attachments: reports/k6_report.html
