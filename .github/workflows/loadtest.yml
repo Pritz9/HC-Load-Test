@@ -42,6 +42,10 @@ jobs:
           name: k6_html_report
           path: reports/k6_report.html
 
+      - name: List report directory contents
+        run: ls -l reports
+
+
       - name: Send HTML Report via Email
         if: always()
         uses: dawidd6/action-send-mail@v3.6.0
