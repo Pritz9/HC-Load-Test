@@ -29,7 +29,7 @@ jobs:
 
       - name: Install k6-html-reporter
         run: |
-          npm install -g k6-html-reporter
+          npm install k6-html-reporter
 
       - name: Run K6 test and generate result
         run: |
@@ -38,7 +38,7 @@ jobs:
 
       - name: Generate HTML Report
         run: |
-          k6-html-reporter --summary-export=result.json --output reports/k6_report.html
+          npx k6-html-reporter --summary-export=result.json --output reports/k6_report.html
 
       - name: Upload HTML Report as Artifact
         if: always()
@@ -64,6 +64,6 @@ jobs:
 
             Please find the attached HTML report for the recent K6 Load Test.
 
-            Regards,  
+            Regards,
             GitHub Actions
           attachments: reports/k6_report.html
