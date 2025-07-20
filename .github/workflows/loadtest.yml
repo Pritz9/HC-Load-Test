@@ -35,11 +35,11 @@ jobs:
 
       - name: Ensure clean output path
         run: |
-          if [ -e reports/k6_report.html ]; then
+          if [ -e HC-Load-Test/reports/k6_report.html ]; then
             echo "Cleaning up existing k6_report.html (file or folder)..."
-            rm -rf reports/k6_report.html
+            rm -rf HC-Load-Test/reports/k6_report.html
           fi
-          mkdir -p reports
+          mkdir -p HC-Load-Test/reports
 
       - name: Generate HTML Report
         run: node generateReport.js
@@ -48,19 +48,19 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: k6_html_report
-          path: reports/k6_report.html
+          path: HC-Load-Test/reports/k6_report.html
 
       - name: List report directory contents
-        run: ls -l reports
+        run: ls -l HC-Load-Test/reports
 
       - name: Check report path before emailing
         run: |
           echo "Verifying report type..."
-          file reports/k6_report.html
-          ls -la reports/
+          file HC-Load-Test/reports/k6_report.html
+          ls -la HC-Load-Test/reports/
 
       - name: Confirm report is a file
-        run: file reports/k6_report.html
+        run: file HC-Load-Test/reports/k6_report.html
 
       - name: Send HTML Report via Email
         if: always()
