@@ -52,6 +52,11 @@ jobs:
       - name: List report directory contents
         run: ls -l reports
 
+      - name: Check report path before emailing
+        run: |
+         echo "Verifying report type..."
+         file reports/k6_report.html
+         ls -la reports/
 
       - name: Send HTML Report via Email
         if: always()
@@ -72,4 +77,5 @@ jobs:
 
             Regards,  
             GitHub Actions
-          attachments: "reports/k6_report.html"
+          attachments: reports/k6_report.html
+
