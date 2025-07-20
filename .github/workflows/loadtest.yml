@@ -81,4 +81,4 @@ jobs:
 
             Regards,
             GitHub Actions
-          attachments: reports/k6_report.html
+          attachments: HC-Load-Test/reports/k6_report.html
