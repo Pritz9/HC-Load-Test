@@ -39,6 +39,7 @@ jobs:
             echo "Cleaning up existing k6_report.html (file or folder)..."
             rm -rf reports/k6_report.html
           fi
+          mkdir -p reports
 
       - name: Generate HTML Report
         run: node generateReport.js
@@ -54,10 +55,10 @@ jobs:
 
       - name: Check report path before emailing
         run: |
-         echo "Verifying report type..."
-         file reports/k6_report.html
-         ls -la reports/
-         
+          echo "Verifying report type..."
+          file reports/k6_report.html
+          ls -la reports/
+
       - name: Confirm report is a file
         run: file reports/k6_report.html
 
@@ -78,7 +79,6 @@ jobs:
 
             Please find the attached HTML report for the recent K6 Load Test.
 
-            Regards,  
+            Regards,
             GitHub Actions
           attachments: reports/k6_report.html
-
