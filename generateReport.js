@@ -1,17 +1,19 @@
-const fs = require('fs');
 const path = require('path');
-const reporter = require('k6-html-reporter');
+const fs = require('fs');
+const reporter = require('k6-html-reporter'); 
 
-const reportsDir = path.join(__dirname, 'reports');
-if (!fs.existsSync(reportsDir)) {
-  fs.mkdirSync(reportsDir);
-}
+const resultPath = path.join(process.cwd(), 'result.json'); 
 
-const outputDir = path.join(reportsDir, 'k6_report'); 
+const outputDir = path.join(process.cwd(), 'reports', 'k6_report'); 
+const outputFile = path.join(outputDir, 'index.html');
+
+// Ensure directory exists
+fs.mkdirSync(outputDir, { recursive: true });
 
 const options = {
-  jsonFile: 'result.json',
-  output: outputDir, 
+  jsonFile: resultPath,
+  output: outputFile,
 };
 
 reporter.generateSummaryReport(options);
+console.log(`Report is created at ${outputFile}`);
