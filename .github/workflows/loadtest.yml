@@ -32,30 +32,17 @@ jobs:
 
       - name: Run K6 test and export summary
         run: k6 run --summary-export=result.json test.js
-
-      - name: Ensure clean output path
-        run: |
-          if [ -e HC-Load-Test/reports/k6_report.html ]; then
-            echo "Cleaning up existing k6_report.html (file or folder)..."
-            rm -rf HC-Load-Test/reports/k6_report.html
-          fi
-          mkdir -p HC-Load-Test/reports
+ 
 
       - name: Generate HTML Report
         run: node generateReport.js
-
-      - name: List full files after report generation
-        run: find .
 
 
       - name: Upload HTML Report as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: k6_html_report
-          path: HC-Load-Test/reports/k6_report.html
-
-      - name: Confirm report is a file
-        run: file HC-Load-Test/reports/k6_report.html
+          path: reports/k6_report/index.html
 
       - name: Send HTML Report via Email
         if: always()
@@ -76,4 +63,4 @@ jobs:
 
             Regards,
             GitHub Actions
-          attachments: HC-Load-Test/reports/k6_report.html
+          attachments: reports/k6_report/index.html
