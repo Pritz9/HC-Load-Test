@@ -43,10 +43,17 @@ jobs:
         with:
           name: k6_html_report
           path: reports/k6_report/index.html
+
       - name: Debug HTML file existence
         run: |
          echo "Checking if report file exists..."
          ls -l reports/k6_report
+
+      - name: Remove incorrect index.html directory if exists
+        run: |
+         if [ -d reports/k6_report/index.html ]; then
+         rm -rf reports/k6_report/index.html
+         fi
 
 
       - name: Send HTML Report via Email
@@ -68,5 +75,6 @@ jobs:
 
             Regards,
             GitHub Actions
-          attachments: ./reports/k6_report/index.html
+          attachments: ./reports/k6_report/report.html
+
 
