@@ -48,20 +48,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: k6_html_report
-          path: HC-Load-Test/reports/k6_report.html
+          path: reports/k6_report/index.html
 
       - name: List report directory contents
-        run: ls -l HC-Load-Test/reports
-
-      - name: Check report path before emailing
         run: |
-          echo "Verifying report type..."
-          file HC-Load-Test/reports/k6_report.html
-          ls -la HC-Load-Test/reports/
+            echo "Directory structure:"
+            ls -R reports
 
       - name: Confirm report is a file
-        run: file HC-Load-Test/reports/k6_report.html
-
+        run: file reports/k6_report/index.html
+        
       - name: Send HTML Report via Email
         if: always()
         uses: dawidd6/action-send-mail@v3.6.0
@@ -81,4 +77,4 @@ jobs:
 
             Regards,
             GitHub Actions
-          attachments: HC-Load-Test/reports/k6_report.html
+          attachments: reports/k6_report/index.html
