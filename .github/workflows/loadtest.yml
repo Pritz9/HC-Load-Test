@@ -43,6 +43,11 @@ jobs:
         with:
           name: k6_html_report
           path: reports/k6_report/index.html
+      - name: Debug HTML file existence
+        run: |
+         echo "Checking if report file exists..."
+         ls -l reports/k6_report
+
 
       - name: Send HTML Report via Email
         if: always()
@@ -63,4 +68,5 @@ jobs:
 
             Regards,
             GitHub Actions
-          attachments: reports/k6_report/index.html
+          attachments: ./reports/k6_report/index.html
+
